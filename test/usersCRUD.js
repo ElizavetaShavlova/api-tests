@@ -3,8 +3,7 @@ const request = supertest('https://gorest.co.in/public-api/');
 // const request = supertest('https://gorest.co.in/public/v2/'); 
 import { expect } from 'chai';
 
-const TOKEN = 
-    'a45e357c080a761f2194bc699f5ef27f1311fdaa50ce8af5658e92377bb42e54';
+const TOKEN = 'a45e357c080a761f2194bc699f5ef27f1311fdaa50ce8af5658e92377bb42e54';
 const USER_VALID_DATA = {
     "name":"Eliz",
     "email":`eliz${Math.floor(Math.random()*9999)}@test.info`,
@@ -21,6 +20,7 @@ let userId;
 /**
  * @todo
  * 1. use shared store to avoid undefind in test names
+ * 2. move all user data to another file (fixtures?)
  */
 describe('Positive tests for CRUD users', () => {
     it('1. Create user account with valid data', () => {
