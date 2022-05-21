@@ -1,7 +1,7 @@
-import request from '../config/common';
+require('dotenv').config();
+import request from '../config/supertest';
 import { expect } from 'chai';
-const TOKEN = 
-    'a45e357c080a761f2194bc699f5ef27f1311fdaa50ce8af5658e92377bb42e54';
+const TOKEN = process.env.USER_TOKEN;
             
 describe('List of User Accounts', () => {
     it('1. Get list of users and verify that it is not empty (using "done" callback)', (done) => {
