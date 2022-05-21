@@ -5,7 +5,7 @@ import { before } from 'mocha';
 import { createRandomUser } from '../helper/user_helper';
 const TOKEN = 'a45e357c080a761f2194bc699f5ef27f1311fdaa50ce8af5658e92377bb42e54';
 
-describe.only('User Posts', () => {
+describe('Creation blogposts with valid data', () => {
     let postId, userId;
     before(async () => {
         userId = await createRandomUser();
@@ -29,5 +29,37 @@ describe.only('User Posts', () => {
             .get(`posts/${postId}`)
             .set('Authorization', `Bearer ${TOKEN}`)
             .expect(200);
+        });
+    });
+    describe.only('Negative tests. Creation blogposts', () => {
+        let postId, userId;
+        before(async () => {
+        userId = await createRandomUser();
+    });
+        it('401. Inability to create post if user not authorized', async () => {
+        const POST_DATA = {
+            user_id: userId,
+            title: 'my title',
+            body: 'my blog post'
+            };
+        const postRes = await request
+            .post('posts')
+            .send(POST_DATA);
+        expect(postRes.body.code).to.eq(401);
+        expect(postRes.body.data.message).to.eq('Authentication failed')
+        });
+        it('422. Inability to create post due to sending lack of data', async () => {
+            const POST_INVALID_DATA = {
+            user_id: userId,
+            title: "",
+            body: 'my blog post'
+            };
+        const postRes = await request
+            .post('posts')
+            .set('Authorization', `Bearer ${TOKEN}`)
+            .send(POST_INVALID_DATA);
+        expect(postRes.body.code).to.eq(422);
+        expect(postRes.body.data[0].field).to.eq('title');
+        expect(postRes.body.data[0].message).to.eq(`can't be blank`);
         });
     });
