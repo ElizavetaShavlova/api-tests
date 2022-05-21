@@ -1,8 +1,5 @@
-import supertest from "supertest";
-const request = supertest('https://gorest.co.in/public-api/'); 
-// const request = supertest('https://gorest.co.in/public/v2/'); 
+import request from '../config/common';
 import { expect } from 'chai';
-
 const TOKEN = 
     'a45e357c080a761f2194bc699f5ef27f1311fdaa50ce8af5658e92377bb42e54';
             

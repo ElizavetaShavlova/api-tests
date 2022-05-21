@@ -1,5 +1,4 @@
-import supertest from 'supertest';
-const request = supertest('https://gorest.co.in/public-api/'); 
+import request from '../config/common';
 import { expect } from 'chai';
 import { before } from 'mocha';
 import { createRandomUser } from '../helper/user_helper';
@@ -31,12 +30,12 @@ describe('Creation blogposts with valid data', () => {
             .expect(200);
         });
     });
-    describe.only('Negative tests. Creation blogposts', () => {
+describe('Negative tests. Creation blogposts', () => {
         let postId, userId;
         before(async () => {
         userId = await createRandomUser();
     });
-        it('401. Inability to create post if user not authorized', async () => {
+    it('401. Inability to create post if user not authorized', async () => {
         const POST_DATA = {
             user_id: userId,
             title: 'my title',
@@ -48,7 +47,7 @@ describe('Creation blogposts with valid data', () => {
         expect(postRes.body.code).to.eq(401);
         expect(postRes.body.data.message).to.eq('Authentication failed')
         });
-        it('422. Inability to create post due to sending lack of data', async () => {
+    it('422. Inability to create post due to sending lack of data', async () => {
             const POST_INVALID_DATA = {
             user_id: userId,
             title: "",
