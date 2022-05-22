@@ -1,4 +1,3 @@
-require('dotenv').config();
 import request from '../config/supertest';
 import { expect } from 'chai';
 const TOKEN = process.env.USER_TOKEN;

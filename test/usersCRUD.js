@@ -1,4 +1,3 @@
-require('dotenv').config();
 import request from '../config/supertest';
 import { expect } from 'chai';
 const TOKEN = process.env.USER_TOKEN;
@@ -14,13 +13,13 @@ const USER_NEW_DATA = {
     "status": "inactive"
     };
 const USER_EMPTY_DATA = {};
-let userId;
 // CRUD for users
 /**
  * @todo
  * 1. use shared store to avoid undefind in test names
  */
 describe('Positive tests for CRUD users', () => {
+    let userId;
     it('1. Create user account with valid data', () => {
         return request
             .post('/users')
