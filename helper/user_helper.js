@@ -15,3 +15,15 @@ export const createRandomUser = async () => {
         .send(USER_VALID_DATA)
     return res.body.data.id;
 };
+
+export const USER_VALID_DATA = {
+    "name":"Eliz",
+    "email":`eliz${Math.floor(Math.random()*9999)}@test.info`,
+    "gender":"female",
+    "status":"active"
+    };
+export const USER_NEW_DATA = {
+    "name": "Eliz55589",
+    "status": "inactive"
+    };
+export const USER_EMPTY_DATA = {};

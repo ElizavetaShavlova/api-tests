@@ -5,7 +5,7 @@ import { before } from 'mocha';
 import { createRandomUser } from '../helper/user_helper';
 const TOKEN = process.env.USER_TOKEN;
 
-describe('Creation blogposts with valid data', () => {
+describe('Creation blogposts with valid data and verify that it is created', () => {
     let postId, userId;
     before(async () => {
         userId = await createRandomUser();
@@ -31,7 +31,7 @@ describe('Creation blogposts with valid data', () => {
             .expect(200);
         });
     });
-describe('Negative tests. Creation blogposts', () => {
+describe('Negative tests. Inability to create blogposts', () => {
         let postId, userId;
         before(async () => {
         userId = await createRandomUser();

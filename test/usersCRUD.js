@@ -1,18 +1,11 @@
 import request from '../config/supertest';
 import { expect } from 'chai';
 const TOKEN = process.env.USER_TOKEN;
+import { USER_VALID_DATA } from '../helper/user_helper';
+import { USER_NEW_DATA } from '../helper/user_helper';
+import { USER_EMPTY_DATA } from '../helper/user_helper';
+import { createRandomUser } from '../helper/user_helper';
 
-const USER_VALID_DATA = {
-    "name":"Eliz",
-    "email":`eliz${Math.floor(Math.random()*9999)}@test.info`,
-    "gender":"female",
-    "status":"active"
-    };
-const USER_NEW_DATA = {
-    "name": "Eliz5558",
-    "status": "inactive"
-    };
-const USER_EMPTY_DATA = {};
 // CRUD for users
 /**
  * @todo
@@ -20,8 +13,8 @@ const USER_EMPTY_DATA = {};
  */
 describe('Positive tests for CRUD users', () => {
     let userId;
-    it('1. Create user account with valid data', () => {
-        return request
+    it('1. Create user account with valid data', async () => {
+        await request
             .post('/users')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send(USER_VALID_DATA)
@@ -29,7 +22,6 @@ describe('Positive tests for CRUD users', () => {
                 expect(res.body.code).to.deep.eq(201);
                 expect(res.body.data).to.deep.include(USER_VALID_DATA);
                 userId = res.body.data.id;
-                console.log(userId);
         });
     });  
     it(`2. Get ${userId} user and verify that it has id=${userId}`, () => {
@@ -38,8 +30,8 @@ describe('Positive tests for CRUD users', () => {
             console.log(userId);
         })        
     });
-    it(`3. Update user name and satus attributes of ${userId} user `, () => {
-        return request
+    it(`3. Update user name and satus attributes of ${userId} user `, async () => {
+        await request
             .put(`/users/${userId}`)
             .set('Authorization', `Bearer ${TOKEN}`)
             .send(USER_NEW_DATA)
@@ -47,23 +39,25 @@ describe('Positive tests for CRUD users', () => {
                 expect(res.body.code).to.deep.eq(200);
                 expect(res.body.data.name).to.deep.eq(USER_NEW_DATA.name);
                 expect(res.body.data.status).to.deep.eq(USER_NEW_DATA.status);
-                console.log(userId);
             });
     });
-    it('4. Delete user and verify that his data returnes as null', () => {
-        return request
+    it('4. Delete user and verify that his data returnes as null', async () => {
+        await  request
             .delete(`/users/${userId}`)
             .set('Authorization', `Bearer ${TOKEN}`)
             .then((res) => {
                 expect(res.body.data).to.deep.eq(null);
-                console.log(userId);
             });
     });
 });
 
-describe('Negative test for create users', () => {
-    it('4. Inability to create user account with empty user data', () => {
-        return request
+describe('Negative test for CRUD users', () => {
+    let userId;
+    before(async () => {
+        userId = await createRandomUser();
+    });
+    it('1. Inability to create user account with empty user data', async () => {
+        await request
             .post('/users')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send(USER_EMPTY_DATA)
@@ -73,5 +67,14 @@ describe('Negative test for create users', () => {
                 expect(data.message).to.eq(`can't be blank`);
             });
         });
+    });
+    it(`2. Inability to create user due to Auth error`, async () => {
+        await request
+            .post('/users')
+            .send(USER_VALID_DATA)
+            .then((res) => {
+                expect(res.body.code).to.deep.eq(401);
+                expect(res.body.data.message).to.deep.equal('Authentication failed');
+            });
     });
 });
