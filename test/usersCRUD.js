@@ -56,7 +56,14 @@ describe('Negative test for CRUD users', () => {
             .set('Authorization', `Bearer ${TOKEN}`)
             .send(USER_EMPTY_DATA)
                 expect(res.body.code).to.deep.eq(422);
-                res.body.data.forEach((data) => {
+                // verify that message for empty 'gender' field is == 'can't be blank, can be male or female'
+                const response = res.body.data
+                expect(response[2].message).to.equal(`can't be blank, can be male or female`)
+                // verify that messages for all other fields are == 'can't be blank'
+                response.forEach((data) => {
+                    if (Object.keys(response).length == 4) {
+                        response.splice(2, 1)               
+                    }
                 expect(data.message).to.eq(`can't be blank`);
         });
     });
