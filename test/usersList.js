@@ -10,18 +10,18 @@ describe('List of User Accounts', () => {
             done();
         });
     });
-    it('2. Get list of users and verify that it is not empty (using promise)', () => {
-        return request.get(`/users?access-token=${TOKEN}`).then((res) => {
+    it('2. Get list of users and verify that it is not empty (using promise)', async () => {
+        const res = await request
+        .get(`/users?access-token=${TOKEN}`)
             expect(res.body.data).to.not.be.empty;
-        });
     });
-    it('3. Get list of users with the following filter params: female, active, from page 5', () => {
+    it('3. Get list of users with the following filter params: female, active, from page 5', async () => {
         const URL = `/users?access-token=${TOKEN}&gender=female&status=active&page=5`
-        return request.get(URL).then((res) =>{
+        const res = await request
+        .get(URL)
             res.body.data.forEach((data) => {
                 expect(data.gender).to.eq('female');
                 expect(data.status).to.eq('active');
-            });
         });
     });
     /**
